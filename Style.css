@@ -4,14 +4,39 @@
   box-sizing: content-box;
 }
 
+main {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: aquamarine;
+}
+
 form {
   display: flex;
+  background-color: white;
   flex-direction: column;
   width: 30%;
   margin: auto;
+  padding: 2rem;
+  gap: 1rem;
+  border-radius: 0.5rem;
+  border: 1px solid gray;
+  box-shadow: 1px 1px 1px grey;
 }
 
 span {
   display: flex;
   width: 100%;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+input, button {
+  padding: 0.5rem 0.25rem;
+}
+
+input[type='checkbox'] {
+  height: 1rem;
+  width: 1rem;
 }

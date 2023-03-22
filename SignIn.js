@@ -29,40 +29,51 @@ const handleIsRemembered = (e) => {
   isRemembered = e.target.checked;
 };
 
-const validateCookie = (cookie) => {
-  const http = new XMLHttpRequest();
-  const data = cookie;
-  http.open('POST', 'https://core.talentspace.ai/api2/verify_token', true);
-  http.send(data);
-  http.onreadystatechange = () => {
-    if (http.status === 200 && http.readyState === 4) {
+const validateCookie = () => {
+  fetch('https://core.talentspace.ai/api2/verify_token', {
+    method: 'POST',
+    mode: 'cors',
+    credentials: 'include',
+    headers: {
+      accept: 'application.json',
+      'Content-Type': 'application/json',
+    },
+    body: {},
+  }).then((response) => {
+    if (response.status === 200) {
       console.log('Success');
-    } else console.log('Failed');
-  };
+    } else {
+      console.log('Error');
+    }
+  });
 };
 
 const handleSubmit = (e) => {
   e.preventDefault();
+
+  if (isRemembered) {
+    document.cookie = `email = ${email} Max-Age=${5 * 60}`;
+    document.cookie = `password = ${password} Max-Age=${5 * 60}`;
+    document.cookie = `isRemembered = ${isRemembered} Max-Age=${5 * 60}`;
+    console.log(document.cookie);
+  }
+  
   const data = new FormData();
   data.append('email', email);
   data.append('password', password);
-  const http = new XMLHttpRequest();
-  http.open('POST', 'https://core.talentspace.ai/api2/login', true);
-  http.responseType = 'json';
-  http.send(data);
-  http.onreadystatechange = () => {
-    if (http.status === 200 && http.readyState === 4) {
-      console.log(http.response);
-      document.cookie = `message=Logged_In Max-Age=${5 * 60}`;
-      validateCookie(getCookie('message'));
-    } else console.log('failed');
-  };
 
-  if (isRemembered) {
-    document.cookie = `email=${email} Max-Age=${5 * 60}`;
-    document.cookie = `password=${password} Max-Age=${5 * 60}`;
-    document.cookie = `isRemembered = ${isRemembered} Max-Age=${5 * 60}`;
-  }
+  fetch('https://core.talentspace.ai/api2/login', {
+    method: 'POST',
+    mode: 'cors',
+    credentials: 'include',
+    headers: {
+      Accept: 'application.json',
+      'Content-Type': 'application/json',
+    },
+    body: data,
+  }).then(() => {
+    validateCookie();
+  });
 };
 
 document
