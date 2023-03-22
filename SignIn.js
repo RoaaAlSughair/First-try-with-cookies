@@ -30,14 +30,18 @@ const handleIsRemembered = (e) => {
 };
 
 const validateCookie = () => {
+  let headers = new Headers();
+  headers.append(
+    'Access-Control-Allow-Origin',
+    'https://core.talentspace.ai/api2/verify_token'
+  );
+  headers.append('Access-Control-Allow-Credentials', true);
+
   fetch('https://core.talentspace.ai/api2/verify_token', {
     method: 'POST',
     mode: 'cors',
     credentials: 'include',
-    headers: {
-      accept: 'application.json',
-      'Content-Type': 'application/json',
-    },
+    headers: headers,
     body: {},
   }).then((response) => {
     if (response.status === 200) {
@@ -57,19 +61,23 @@ const handleSubmit = (e) => {
     document.cookie = `isRemembered = ${isRemembered} Max-Age=${5 * 60}`;
     console.log(document.cookie);
   }
-  
+
   const data = new FormData();
   data.append('email', email);
   data.append('password', password);
+
+  let headers = new Headers();
+  headers.append(
+    'Access-Control-Allow-Origin',
+    'https://core.talentspace.ai/api2/login'
+  );
+  headers.append('Access-Control-Allow-Credentials', true);
 
   fetch('https://core.talentspace.ai/api2/login', {
     method: 'POST',
     mode: 'cors',
     credentials: 'include',
-    headers: {
-      Accept: 'application.json',
-      'Content-Type': 'application/json',
-    },
+    headers: headers,
     body: data,
   }).then(() => {
     validateCookie();
