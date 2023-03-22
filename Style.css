@@ -3,3 +3,15 @@
   padding: 0;
   box-sizing: content-box;
 }
+
+form {
+  display: flex;
+  flex-direction: column;
+  width: 30%;
+  margin: auto;
+}
+
+span {
+  display: flex;
+  width: 100%;
+}
