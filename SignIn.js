@@ -15,14 +15,23 @@ const handleIsRemembered = (e) => {
 const handleSubmit = (e) => {
   e.preventDefault();
   const data = new FormData();
-  data.append("email", email);
-  data.append("password", password);
+  data.append('email', email);
+  data.append('password', password);
   const http = new XMLHttpRequest();
   http.open('POST', 'https://core.talentspace.ai/api2/login', true);
   http.responseType = 'json';
   http.send(data);
-  http.onload = () => {
-    console.log(http.response);
+  http.onreadystatechange = () => {
+    if (http.status === 200 && http.readyState === 4) {
+      console.log(http.response);
+      document.cookie = `message=Logged_In Max-Age=${5 * 60 * 1000}`;
+    } else console.log("failed");
+  };
+
+  if (isRemembered) {
+    document.cookie = `email=${email} Max-Age=${5 * 60 * 1000}`;
+    document.cookie = `password=${password} Max-Age=${5 * 60 * 1000}`;
+    document.cookie = `isRemembered = ${isRemembered} Max-Age=${5 * 60 * 1000}`;
   }
 };
 
@@ -35,6 +44,4 @@ document
 document
   .querySelector(`input[type = checkbox]`)
   .addEventListener('change', handleIsRemembered);
-document
-  .querySelector(`button`)
-  .addEventListener('click', handleSubmit);
+document.querySelector(`button`).addEventListener('click', handleSubmit);
